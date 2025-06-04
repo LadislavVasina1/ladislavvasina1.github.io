@@ -1,0 +1,769 @@
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=utf-8"/><title>MacOS FR24Feeder/TrackedPlanesMap</title><style>
+/* cspell:disable-file */
+/* webkit printing magic: print all background colors */
+html {
+	-webkit-print-color-adjust: exact;
+}
+* {
+	box-sizing: border-box;
+	-webkit-print-color-adjust: exact;
+}
+
+html,
+body {
+	margin: 0;
+	padding: 0;
+}
+@media only screen {
+	body {
+		margin: 2em auto;
+		max-width: 900px;
+		color: rgb(55, 53, 47);
+	}
+}
+
+body {
+	line-height: 1.5;
+	white-space: pre-wrap;
+}
+
+a,
+a.visited {
+	color: inherit;
+	text-decoration: underline;
+}
+
+.pdf-relative-link-path {
+	font-size: 80%;
+	color: #444;
+}
+
+h1,
+h2,
+h3 {
+	letter-spacing: -0.01em;
+	line-height: 1.2;
+	font-weight: 600;
+	margin-bottom: 0;
+}
+
+.page-title {
+	font-size: 2.5rem;
+	font-weight: 700;
+	margin-top: 0;
+	margin-bottom: 0.75em;
+}
+
+h1 {
+	font-size: 1.875rem;
+	margin-top: 1.875rem;
+}
+
+h2 {
+	font-size: 1.5rem;
+	margin-top: 1.5rem;
+}
+
+h3 {
+	font-size: 1.25rem;
+	margin-top: 1.25rem;
+}
+
+.source {
+	border: 1px solid #ddd;
+	border-radius: 3px;
+	padding: 1.5em;
+	word-break: break-all;
+}
+
+.callout {
+	border-radius: 3px;
+	padding: 1rem;
+}
+
+figure {
+	margin: 1.25em 0;
+	page-break-inside: avoid;
+}
+
+figcaption {
+	opacity: 0.5;
+	font-size: 85%;
+	margin-top: 0.5em;
+}
+
+mark {
+	background-color: transparent;
+}
+
+.indented {
+	padding-left: 1.5em;
+}
+
+hr {
+	background: transparent;
+	display: block;
+	width: 100%;
+	height: 1px;
+	visibility: visible;
+	border: none;
+	border-bottom: 1px solid rgba(55, 53, 47, 0.09);
+}
+
+img {
+	max-width: 100%;
+}
+
+@media only print {
+	img {
+		max-height: 100vh;
+		object-fit: contain;
+	}
+}
+
+@page {
+	margin: 1in;
+}
+
+.collection-content {
+	font-size: 0.875rem;
+}
+
+.column-list {
+	display: flex;
+	justify-content: space-between;
+}
+
+.column {
+	padding: 0 1em;
+}
+
+.column:first-child {
+	padding-left: 0;
+}
+
+.column:last-child {
+	padding-right: 0;
+}
+
+.table_of_contents-item {
+	display: block;
+	font-size: 0.875rem;
+	line-height: 1.3;
+	padding: 0.125rem;
+}
+
+.table_of_contents-indent-1 {
+	margin-left: 1.5rem;
+}
+
+.table_of_contents-indent-2 {
+	margin-left: 3rem;
+}
+
+.table_of_contents-indent-3 {
+	margin-left: 4.5rem;
+}
+
+.table_of_contents-link {
+	text-decoration: none;
+	opacity: 0.7;
+	border-bottom: 1px solid rgba(55, 53, 47, 0.18);
+}
+
+table,
+th,
+td {
+	border: 1px solid rgba(55, 53, 47, 0.09);
+	border-collapse: collapse;
+}
+
+table {
+	border-left: none;
+	border-right: none;
+}
+
+th,
+td {
+	font-weight: normal;
+	padding: 0.25em 0.5em;
+	line-height: 1.5;
+	min-height: 1.5em;
+	text-align: left;
+}
+
+th {
+	color: rgba(55, 53, 47, 0.6);
+}
+
+ol,
+ul {
+	margin: 0;
+	margin-block-start: 0.6em;
+	margin-block-end: 0.6em;
+}
+
+li > ol:first-child,
+li > ul:first-child {
+	margin-block-start: 0.6em;
+}
+
+ul > li {
+	list-style: disc;
+}
+
+ul.to-do-list {
+	padding-inline-start: 0;
+}
+
+ul.to-do-list > li {
+	list-style: none;
+}
+
+.to-do-children-checked {
+	text-decoration: line-through;
+	opacity: 0.375;
+}
+
+ul.toggle > li {
+	list-style: none;
+}
+
+ul {
+	padding-inline-start: 1.7em;
+}
+
+ul > li {
+	padding-left: 0.1em;
+}
+
+ol {
+	padding-inline-start: 1.6em;
+}
+
+ol > li {
+	padding-left: 0.2em;
+}
+
+.mono ol {
+	padding-inline-start: 2em;
+}
+
+.mono ol > li {
+	text-indent: -0.4em;
+}
+
+.toggle {
+	padding-inline-start: 0em;
+	list-style-type: none;
+}
+
+/* Indent toggle children */
+.toggle > li > details {
+	padding-left: 1.7em;
+}
+
+.toggle > li > details > summary {
+	margin-left: -1.1em;
+}
+
+.selected-value {
+	display: inline-block;
+	padding: 0 0.5em;
+	background: rgba(206, 205, 202, 0.5);
+	border-radius: 3px;
+	margin-right: 0.5em;
+	margin-top: 0.3em;
+	margin-bottom: 0.3em;
+	white-space: nowrap;
+}
+
+.collection-title {
+	display: inline-block;
+	margin-right: 1em;
+}
+
+.page-description {
+	margin-bottom: 2em;
+}
+
+.simple-table {
+	margin-top: 1em;
+	font-size: 0.875rem;
+	empty-cells: show;
+}
+.simple-table td {
+	height: 29px;
+	min-width: 120px;
+}
+
+.simple-table th {
+	height: 29px;
+	min-width: 120px;
+}
+
+.simple-table-header-color {
+	background: rgb(247, 246, 243);
+	color: black;
+}
+.simple-table-header {
+	font-weight: 500;
+}
+
+time {
+	opacity: 0.5;
+}
+
+.icon {
+	display: inline-block;
+	max-width: 1.2em;
+	max-height: 1.2em;
+	text-decoration: none;
+	vertical-align: text-bottom;
+	margin-right: 0.5em;
+}
+
+img.icon {
+	border-radius: 3px;
+}
+
+.user-icon {
+	width: 1.5em;
+	height: 1.5em;
+	border-radius: 100%;
+	margin-right: 0.5rem;
+}
+
+.user-icon-inner {
+	font-size: 0.8em;
+}
+
+.text-icon {
+	border: 1px solid #000;
+	text-align: center;
+}
+
+.page-cover-image {
+	display: block;
+	object-fit: cover;
+	width: 100%;
+	max-height: 30vh;
+}
+
+.page-header-icon {
+	font-size: 3rem;
+	margin-bottom: 1rem;
+}
+
+.page-header-icon-with-cover {
+	margin-top: -0.72em;
+	margin-left: 0.07em;
+}
+
+.page-header-icon img {
+	border-radius: 3px;
+}
+
+.link-to-page {
+	margin: 1em 0;
+	padding: 0;
+	border: none;
+	font-weight: 500;
+}
+
+p > .user {
+	opacity: 0.5;
+}
+
+td > .user,
+td > time {
+	white-space: nowrap;
+}
+
+input[type="checkbox"] {
+	transform: scale(1.5);
+	margin-right: 0.6em;
+	vertical-align: middle;
+}
+
+p {
+	margin-top: 0.5em;
+	margin-bottom: 0.5em;
+}
+
+.image {
+	border: none;
+	margin: 1.5em 0;
+	padding: 0;
+	border-radius: 0;
+	text-align: center;
+}
+
+.code,
+code {
+	background: rgba(135, 131, 120, 0.15);
+	border-radius: 3px;
+	padding: 0.2em 0.4em;
+	border-radius: 3px;
+	font-size: 85%;
+	tab-size: 2;
+}
+
+code {
+	color: #eb5757;
+}
+
+.code {
+	padding: 1.5em 1em;
+}
+
+.code-wrap {
+	white-space: pre-wrap;
+	word-break: break-all;
+}
+
+.code > code {
+	background: none;
+	padding: 0;
+	font-size: 100%;
+	color: inherit;
+}
+
+blockquote {
+	font-size: 1.25em;
+	margin: 1em 0;
+	padding-left: 1em;
+	border-left: 3px solid rgb(55, 53, 47);
+}
+
+.bookmark {
+	text-decoration: none;
+	max-height: 8em;
+	padding: 0;
+	display: flex;
+	width: 100%;
+	align-items: stretch;
+}
+
+.bookmark-title {
+	font-size: 0.85em;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	height: 1.75em;
+	white-space: nowrap;
+}
+
+.bookmark-text {
+	display: flex;
+	flex-direction: column;
+}
+
+.bookmark-info {
+	flex: 4 1 180px;
+	padding: 12px 14px 14px;
+	display: flex;
+	flex-direction: column;
+	justify-content: space-between;
+}
+
+.bookmark-image {
+	width: 33%;
+	flex: 1 1 180px;
+	display: block;
+	position: relative;
+	object-fit: cover;
+	border-radius: 1px;
+}
+
+.bookmark-description {
+	color: rgba(55, 53, 47, 0.6);
+	font-size: 0.75em;
+	overflow: hidden;
+	max-height: 4.5em;
+	word-break: break-word;
+}
+
+.bookmark-href {
+	font-size: 0.75em;
+	margin-top: 0.25em;
+}
+
+.sans { font-family: ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI Variable Display", "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol"; }
+.code { font-family: "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace; }
+.serif { font-family: Lyon-Text, Georgia, ui-serif, serif; }
+.mono { font-family: iawriter-mono, Nitti, Menlo, Courier, monospace; }
+.pdf .sans { font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI Variable Display", "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol", 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK JP'; }
+.pdf:lang(zh-CN) .sans { font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI Variable Display", "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol", 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK SC'; }
+.pdf:lang(zh-TW) .sans { font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI Variable Display", "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol", 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK TC'; }
+.pdf:lang(ko-KR) .sans { font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI Variable Display", "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol", 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK KR'; }
+.pdf .code { font-family: Source Code Pro, "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK JP'; }
+.pdf:lang(zh-CN) .code { font-family: Source Code Pro, "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK SC'; }
+.pdf:lang(zh-TW) .code { font-family: Source Code Pro, "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK TC'; }
+.pdf:lang(ko-KR) .code { font-family: Source Code Pro, "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK KR'; }
+.pdf .serif { font-family: PT Serif, Lyon-Text, Georgia, ui-serif, serif, 'Twemoji', 'Noto Color Emoji', 'Noto Serif CJK JP'; }
+.pdf:lang(zh-CN) .serif { font-family: PT Serif, Lyon-Text, Georgia, ui-serif, serif, 'Twemoji', 'Noto Color Emoji', 'Noto Serif CJK SC'; }
+.pdf:lang(zh-TW) .serif { font-family: PT Serif, Lyon-Text, Georgia, ui-serif, serif, 'Twemoji', 'Noto Color Emoji', 'Noto Serif CJK TC'; }
+.pdf:lang(ko-KR) .serif { font-family: PT Serif, Lyon-Text, Georgia, ui-serif, serif, 'Twemoji', 'Noto Color Emoji', 'Noto Serif CJK KR'; }
+.pdf .mono { font-family: PT Mono, iawriter-mono, Nitti, Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK JP'; }
+.pdf:lang(zh-CN) .mono { font-family: PT Mono, iawriter-mono, Nitti, Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK SC'; }
+.pdf:lang(zh-TW) .mono { font-family: PT Mono, iawriter-mono, Nitti, Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK TC'; }
+.pdf:lang(ko-KR) .mono { font-family: PT Mono, iawriter-mono, Nitti, Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK KR'; }
+.highlight-default {
+	color: rgba(50, 48, 44, 1);
+}
+.highlight-gray {
+	color: rgba(115, 114, 110, 1);
+	fill: rgba(115, 114, 110, 1);
+}
+.highlight-brown {
+	color: rgba(159, 107, 83, 1);
+	fill: rgba(159, 107, 83, 1);
+}
+.highlight-orange {
+	color: rgba(217, 115, 13, 1);
+	fill: rgba(217, 115, 13, 1);
+}
+.highlight-yellow {
+	color: rgba(203, 145, 47, 1);
+	fill: rgba(203, 145, 47, 1);
+}
+.highlight-teal {
+	color: rgba(68, 131, 97, 1);
+	fill: rgba(68, 131, 97, 1);
+}
+.highlight-blue {
+	color: rgba(51, 126, 169, 1);
+	fill: rgba(51, 126, 169, 1);
+}
+.highlight-purple {
+	color: rgba(144, 101, 176, 1);
+	fill: rgba(144, 101, 176, 1);
+}
+.highlight-pink {
+	color: rgba(193, 76, 138, 1);
+	fill: rgba(193, 76, 138, 1);
+}
+.highlight-red {
+	color: rgba(205, 60, 58, 1);
+	fill: rgba(205, 60, 58, 1);
+}
+.highlight-default_background {
+	color: rgba(50, 48, 44, 1);
+}
+.highlight-gray_background {
+	background: rgba(248, 248, 247, 1);
+}
+.highlight-brown_background {
+	background: rgba(244, 238, 238, 1);
+}
+.highlight-orange_background {
+	background: rgba(251, 236, 221, 1);
+}
+.highlight-yellow_background {
+	background: rgba(251, 243, 219, 1);
+}
+.highlight-teal_background {
+	background: rgba(237, 243, 236, 1);
+}
+.highlight-blue_background {
+	background: rgba(231, 243, 248, 1);
+}
+.highlight-purple_background {
+	background: rgba(248, 243, 252, 1);
+}
+.highlight-pink_background {
+	background: rgba(252, 241, 246, 1);
+}
+.highlight-red_background {
+	background: rgba(253, 235, 236, 1);
+}
+.block-color-default {
+	color: inherit;
+	fill: inherit;
+}
+.block-color-gray {
+	color: rgba(115, 114, 110, 1);
+	fill: rgba(115, 114, 110, 1);
+}
+.block-color-brown {
+	color: rgba(159, 107, 83, 1);
+	fill: rgba(159, 107, 83, 1);
+}
+.block-color-orange {
+	color: rgba(217, 115, 13, 1);
+	fill: rgba(217, 115, 13, 1);
+}
+.block-color-yellow {
+	color: rgba(203, 145, 47, 1);
+	fill: rgba(203, 145, 47, 1);
+}
+.block-color-teal {
+	color: rgba(68, 131, 97, 1);
+	fill: rgba(68, 131, 97, 1);
+}
+.block-color-blue {
+	color: rgba(51, 126, 169, 1);
+	fill: rgba(51, 126, 169, 1);
+}
+.block-color-purple {
+	color: rgba(144, 101, 176, 1);
+	fill: rgba(144, 101, 176, 1);
+}
+.block-color-pink {
+	color: rgba(193, 76, 138, 1);
+	fill: rgba(193, 76, 138, 1);
+}
+.block-color-red {
+	color: rgba(205, 60, 58, 1);
+	fill: rgba(205, 60, 58, 1);
+}
+.block-color-default_background {
+	color: inherit;
+	fill: inherit;
+}
+.block-color-gray_background {
+	background: rgba(248, 248, 247, 1);
+}
+.block-color-brown_background {
+	background: rgba(244, 238, 238, 1);
+}
+.block-color-orange_background {
+	background: rgba(251, 236, 221, 1);
+}
+.block-color-yellow_background {
+	background: rgba(251, 243, 219, 1);
+}
+.block-color-teal_background {
+	background: rgba(237, 243, 236, 1);
+}
+.block-color-blue_background {
+	background: rgba(231, 243, 248, 1);
+}
+.block-color-purple_background {
+	background: rgba(248, 243, 252, 1);
+}
+.block-color-pink_background {
+	background: rgba(252, 241, 246, 1);
+}
+.block-color-red_background {
+	background: rgba(253, 235, 236, 1);
+}
+.select-value-color-uiBlue { background-color: undefined; }
+.select-value-color-pink { background-color: rgba(225, 136, 179, 0.27); }
+.select-value-color-purple { background-color: rgba(168, 129, 197, 0.27); }
+.select-value-color-green { background-color: rgba(123, 183, 129, 0.27); }
+.select-value-color-gray { background-color: rgba(84, 72, 49, 0.15); }
+.select-value-color-translucentGray { background-color: undefined; }
+.select-value-color-orange { background-color: rgba(224, 124, 57, 0.27); }
+.select-value-color-brown { background-color: rgba(210, 162, 141, 0.35); }
+.select-value-color-red { background-color: rgba(244, 171, 159, 0.4); }
+.select-value-color-yellow { background-color: rgba(236, 191, 66, 0.39); }
+.select-value-color-blue { background-color: rgba(93, 165, 206, 0.27); }
+.select-value-color-pageGlass { background-color: undefined; }
+.select-value-color-washGlass { background-color: undefined; }
+
+.checkbox {
+	display: inline-flex;
+	vertical-align: text-bottom;
+	width: 16;
+	height: 16;
+	background-size: 16px;
+	margin-left: 2px;
+	margin-right: 5px;
+}
+
+.checkbox-on {
+	background-image: url("data:image/svg+xml;charset=UTF-8,%3Csvg%20width%3D%2216%22%20height%3D%2216%22%20viewBox%3D%220%200%2016%2016%22%20fill%3D%22none%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%0A%3Crect%20width%3D%2216%22%20height%3D%2216%22%20fill%3D%22%2358A9D7%22%2F%3E%0A%3Cpath%20d%3D%22M6.71429%2012.2852L14%204.9995L12.7143%203.71436L6.71429%209.71378L3.28571%206.2831L2%207.57092L6.71429%2012.2852Z%22%20fill%3D%22white%22%2F%3E%0A%3C%2Fsvg%3E");
+}
+
+.checkbox-off {
+	background-image: url("data:image/svg+xml;charset=UTF-8,%3Csvg%20width%3D%2216%22%20height%3D%2216%22%20viewBox%3D%220%200%2016%2016%22%20fill%3D%22none%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%0A%3Crect%20x%3D%220.75%22%20y%3D%220.75%22%20width%3D%2214.5%22%20height%3D%2214.5%22%20fill%3D%22white%22%20stroke%3D%22%2336352F%22%20stroke-width%3D%221.5%22%2F%3E%0A%3C%2Fsvg%3E");
+}
+	
+</style></head><body><article id="2079eb5c-4b27-808e-ba99-fa10e7c6b431" class="page sans"><header><h1 class="page-title">RTL-SDR MacOS FR24Feeder <br>and <br>Tracked Planes Map ✈️</h1><p class="page-description"></p></header><div class="page-body"><p id="2079eb5c-4b27-80d7-a06e-c34d3ef0ab98" class="">Hi all, I created this tutorial as I was not able to find up to date in one solution for macOS.</p><p id="2079eb5c-4b27-801e-bae0-f9c2d89450c0" class="">This tutorial consists of 2 steps:</p><ol type="1" id="2079eb5c-4b27-801b-a6b1-c1d72031b0f8" class="numbered-list" start="1"><li>Getting Dump1090 software running on macOS</li></ol><ol type="1" id="2079eb5c-4b27-80ef-a86f-fdcfb8741c20" class="numbered-list" start="2"><li>Creating Docker container with fr24feed, which will process data from Dump1090</li></ol><p id="2079eb5c-4b27-8012-b6b7-f68fd6a07fc0" class="">
+</p><p id="2079eb5c-4b27-800f-957a-fe6670307962" class="">Prerequisite:</p><ul id="2079eb5c-4b27-80a4-987f-cd3a19cfe44f" class="bulleted-list"><li style="list-style-type:disc">Python 3 is installed on your system</li></ul><ul id="2079eb5c-4b27-804b-83f4-fe8c9c24f1ef" class="bulleted-list"><li style="list-style-type:disc">Docker is installed on your system</li></ul><ul id="2079eb5c-4b27-80fd-bf5f-d65aae42165f" class="bulleted-list"><li style="list-style-type:disc">Own  <a href="https://www.rtl-sdr.com/about-rtl-sdr/">RTL-SDR dongle</a> and connect it to your Mac (I used a normal USB-C dock for the dongle connection)</li></ul><ul id="2079eb5c-4b27-80b3-a0bf-f15820096e74" class="bulleted-list"><li style="list-style-type:disc">Be registered as a FlightRadar24 feeder, you need <code>SHARING KEY</code>. You can check it here <a href="https://www.flightradar24.com/account/data-sharing">https://www.flightradar24.com/account/data-sharing</a></li></ul><h1 id="2079eb5c-4b27-80c5-87d3-fb74aa2eb4c3" class="">1. Getting Dump1090</h1><ol type="1" id="2079eb5c-4b27-8067-83ac-d144b883ab72" class="numbered-list" start="1"><li>Install <code>MacPorts</code> for your version of macOS from <a href="https://www.macports.org/install.php">https://www.macports.org/install.php</a></li></ol><p id="2079eb5c-4b27-804a-b691-ced8f9b14ad3" class="">
+</p><ol type="1" id="2079eb5c-4b27-8051-a395-ccee2038819b" class="numbered-list" start="1"><li>Run MacPorts</li></ol><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="2079eb5c-4b27-8067-88c1-de4eccb8cdfc" class="code"><code class="language-Bash">sudo port selfupdate
+sudo port install help2man
+sudo port install gqrx</code></pre><ol type="1" id="2079eb5c-4b27-8030-81d7-c5fd311c79c2" class="numbered-list" start="3"><li>Build Dump1090 software (is used RTL-SDR feed decoding)</li></ol><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="2079eb5c-4b27-80fc-99d5-ecfd5683651a" class="code"><code class="language-Bash"># in the directory where you want to have dump1090
+git clone https://github.com/flightaware/dump1090
+cd dump1090
+make</code></pre><p id="2079eb5c-4b27-80c7-b17f-dcb8db333ac5" class="">In one terminal run (you must be in the directory where the Dump1090 is installed):</p><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="2079eb5c-4b27-8085-8571-ceb5dbcc7944" class="code"><code class="language-Bash">./dump1090 --interactive --net --write-json public_html/data --aggressive</code></pre><p id="2079eb5c-4b27-8020-ba79-decdccc3af68" class="">This step initializes feed collection from your RTL-SDR dongle.</p><p id="2079eb5c-4b27-802b-85f8-cf79e83d278e" class="">It should show something like this:</p><figure id="2079eb5c-4b27-8058-b2ad-e3246c154de5" class="image"><a href="MacOS%20FR24Feeder%20TrackedPlanesMap%202079eb5c4b27808eba99fa10e7c6b431/image.png"><img style="width:709.9921875px" src="MacOS%20FR24Feeder%20TrackedPlanesMap%202079eb5c4b27808eba99fa10e7c6b431/image.png"/></a></figure><p id="2079eb5c-4b27-8023-a2e1-f6f824f359ae" class="">
+</p><h3 id="2079eb5c-4b27-80ca-b3f3-ff1bbbdd900e" class="">Now, visualize and check the data we are getting from RTL-SDR</h3><p id="2079eb5c-4b27-8067-b505-f89c758e5730" class="">In the second terminal run (you must be in the directory where the Dump1090 is installed):</p><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="2079eb5c-4b27-80ef-a708-f5dd9baa81e3" class="code"><code class="language-Bash"># TO START THE SERVER RUN FOLLOWING COMMANDS
+mkdir data
+python3 -m http.server 8090 &amp;
+
+# TO KILL THE SERVER RUN FOLLOWING COMMAND
+sudo kill $(sudo lsof -i :8090 | awk &#x27;NR&gt;1 {print $2}&#x27;)</code></pre><p id="2079eb5c-4b27-8075-9ca1-ef8d17aaf24c" class="">This will run the server on which we can access the map with our planes.</p><p id="2079eb5c-4b27-8068-ba7c-e3d806c59d64" class="">The address for the map is <a href="http://127.0.0.1:8090/public_html/">http://127.0.0.1:8090/public_html/</a> </p><p id="2079eb5c-4b27-80d5-b175-eb043533b757" class="">It should look like this:</p><figure id="2079eb5c-4b27-80b6-9f63-ea7dd79da524" class="image"><a href="MacOS%20FR24Feeder%20TrackedPlanesMap%202079eb5c4b27808eba99fa10e7c6b431/image%201.png"><img style="width:709.984375px" src="MacOS%20FR24Feeder%20TrackedPlanesMap%202079eb5c4b27808eba99fa10e7c6b431/image%201.png"/></a></figure><p id="2079eb5c-4b27-80a1-8d36-c18ddf3c1ae4" class="">Now that we have data visualized on the map, we will check that the data are exposed via TCP on various ports. </p><p id="2079eb5c-4b27-8068-9720-c972a75e0cee" class="">It is exposed on our macOS machine’s <code>localhost</code>, but we don’t want to use <code>localhost</code> as it can be confusing for the Docker container we will use in the future.</p><p id="2079eb5c-4b27-8023-8b5e-d1d1c1e78e5e" class="">Because of that, we need to find your macOS Host’s IP Address</p><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="2079eb5c-4b27-80ca-b4aa-e71b3bb76d2c" class="code"><code class="language-Bash"># Get your macOS host&#x27;s ip address
+ipconfig getifaddr en0
+</code></pre><p id="2079eb5c-4b27-80af-847b-e748e61418b1" class="">Remember the output of this command (e.g. <code>192.168.0.193</code>)</p><p id="2079eb5c-4b27-80a1-8541-f36d9f220665" class="">Now we will verify that we are getting the data from the RTL-SDR on the desired ports.</p><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="2079eb5c-4b27-8081-bfda-cf123f0fa5b9" class="code"><code class="language-Bash"># Replace 192.168.0.193 with your own IP address
+nc 192.168.0.193 30005</code></pre><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="2079eb5c-4b27-803e-95a6-d4c9a58d7891" class="code"><code class="language-Bash">3
+ ���
+��h0�m3,2
+         �ɜ�ᗰ�k3
+                ��@Z���H0�}�63
+                              �̲l���H0�}�63
+                                          ��$����6
+                                                  : 
+                                                    ފ�o3</code></pre><p id="2079eb5c-4b27-804b-9e13-d533b6f23386" class="">You should see some binary output (won’t make sense to you, but will to FR24Feeder)</p><h1 id="2079eb5c-4b27-8086-b3f2-e9c748b1f168" class="">2. Creating FR24Feeder Docker container</h1><p id="2079eb5c-4b27-8056-ae22-df19d1541398" class="">
+</p><p id="2079eb5c-4b27-80a9-824e-f6dd8327c87f" class="">
+</p><ol type="1" id="2079eb5c-4b27-80ff-97a2-f56b6c9d37c2" class="numbered-list" start="1"><li>Create a new directory i.e. <code>FR24_docker</code></li></ol><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="2079eb5c-4b27-80b8-802d-dec19eb5dbf3" class="code"><code class="language-Bash">mkdir FR24_docker
+cd FR24_docker</code></pre><ol type="1" id="2079eb5c-4b27-800c-a14e-e0509dd75f42" class="numbered-list" start="2"><li>Now we need to create a Dockerfile</li></ol><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="2079eb5c-4b27-80d4-8efe-fa8a3b19c0d2" class="code"><code class="language-Bash">touch Dockerfile</code></pre><p id="2079eb5c-4b27-8071-9958-e917430ebcca" class="">Into this file, paste the following content:</p><p id="2079eb5c-4b27-8086-864a-c36d8f13f5ad" class=""><strong>NOTE: Replace </strong><code><strong>YOUR_FR24_KEY</strong></code> <strong>and</strong> <code><strong>YOUR_LOCAL_IP</strong></code> <strong>with your variables.</strong></p><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="2079eb5c-4b27-8061-80db-cb2d23ef679f" class="code"><code class="language-Bash"># Use a lightweight Debian base image
+FROM debian:bullseye-slim
+
+# Install dependencies required for FR24 feeder
+RUN apt-get update &amp;&amp; apt-get install -y \
+    wget \
+    tar \
+    libusb-1.0-0 \
+    net-tools \
+    procps \
+    &amp;&amp; rm -rf /var/lib/apt/lists/*
+
+# Download and install the FR24 feeder
+RUN wget -O /tmp/fr24feed.tgz https://repo-feed.flightradar24.com/linux_binaries/fr24feed_1.0.51-0_amd64.tgz \
+    &amp;&amp; if [ ! -s /tmp/fr24feed.tgz ]; then echo &quot;Download failed&quot;; exit 1; fi \
+    &amp;&amp; mkdir -p /opt/fr24feed \
+    &amp;&amp; tar -xzf /tmp/fr24feed.tgz -C /opt/fr24feed --strip-components=1 \
+    &amp;&amp; rm /tmp/fr24feed.tgz \
+    &amp;&amp; if [ ! -f /opt/fr24feed/fr24feed ]; then echo &quot;FR24 binary not found&quot;; exit 1; fi
+
+# Create a directory for FR24 logs
+RUN mkdir -p /var/log/fr24feed
+
+# Expose the FR24 feeder web interface port
+EXPOSE 8754
+
+# Environment variables for FR24 configuration
+ENV FR24KEY=&quot;YOUR_FR24_KEY&quot;
+ENV BEASTHOST=&quot;YOUR_LOCAL_IP&quot;
+ENV BEASTPORT=&quot;30005&quot;
+ENV MLAT=&quot;yes&quot;
+ENV MLAT_WITHOUT_GPS=&quot;yes&quot;
+
+# Copy a startup script to configure and run FR24 feeder
+COPY start-fr24feed.sh /start-fr24feed.sh
+RUN chmod +x /start-fr24feed.sh
+
+# Command to run the FR24 feeder
+CMD [&quot;/start-fr24feed.sh&quot;]</code></pre><p id="2079eb5c-4b27-804c-b5ec-f18439fd73dc" class="">Now, create another file <code>start-fr24feed.sh</code> </p><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="2079eb5c-4b27-80f4-99f4-e6a06cf6275b" class="code"><code class="language-Bash">touch start-fr24feed.sh</code></pre><p id="2079eb5c-4b27-80ae-88c9-cc160ad7aba5" class="">Into this file, paste the following content:</p><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="2079eb5c-4b27-8085-bd14-f70f4ed3b372" class="code"><code class="language-Bash">#!/bin/bash
+# Generate fr24feed.ini configuration file
+cat &gt; /etc/fr24feed.ini &lt;&lt;EOF
+receiver=&quot;beast-tcp&quot;
+host=&quot;${BEASTHOST}:${BEASTPORT}&quot;
+fr24key=&quot;${FR24KEY}&quot;
+bs=&quot;no&quot;
+raw=&quot;no&quot;
+logmode=&quot;1&quot;
+logpath=&quot;/var/log/fr24feed&quot;
+mlat=&quot;${MLAT}&quot;
+mlat-without-gps=&quot;${MLAT_WITHOUT_GPS}&quot;
+EOF
+
+# Start the FR24 feeder
+exec /opt/fr24feed/fr24feed</code></pre><p id="2079eb5c-4b27-80d9-bbca-cb71220b7153" class="">And now, finally, let&#x27;s build the Docker image and run our FR24Feeder container.</p><p id="2079eb5c-4b27-80cd-ae5b-c8a7dce6ab58" class="">Run the following commands:</p><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="2079eb5c-4b27-800e-ba9d-c5a808b597cc" class="code"><code class="language-Bash"># Build the Docker image
+docker build -t fr24feed .
+# Run the container 
+# (Replace 192.168.0.193 with your IP we got previously using ipconfig getifaddr en0)
+docker run -d --name fr24feed -p 8754:8754 -e BEASTHOST=192.168.0.193  -e BEASTPORT=30005 fr24feed</code></pre><p id="2079eb5c-4b27-804f-a753-f5c8d209dc3c" class="">At this point, everything should be working, and you should be able to check your FR24Feeder status on</p><p id="2079eb5c-4b27-8043-812b-f2b1b70fb5d2" class=""><a href="http://192.168.0.193:8754/">http://YOUR_IP_ADDR:8754/</a></p><p id="2079eb5c-4b27-806f-b80a-db73704a16e9" class="">or</p><p id="2079eb5c-4b27-8067-ac09-db86254f61f1" class=""><a href="http://localhost:8754/">http://localhost:8754/</a></p><p id="2079eb5c-4b27-80b5-9b6a-d4c2a2c78d5e" class="">It should look something like this.</p><figure id="2079eb5c-4b27-80cc-b920-f9ed6339a963" class="image"><a href="MacOS%20FR24Feeder%20TrackedPlanesMap%202079eb5c4b27808eba99fa10e7c6b431/image%202.png"><img style="width:709.984375px" src="MacOS%20FR24Feeder%20TrackedPlanesMap%202079eb5c4b27808eba99fa10e7c6b431/image%202.png"/></a></figure><p id="2079eb5c-4b27-8040-9d49-d4459015ad6b" class="">
+</p><p id="2079eb5c-4b27-80fc-8313-df509dc5f219" class="">
+</p><p id="2079eb5c-4b27-80ac-8206-cd874a3ac85e" class="">Hope this helps.&lt;3</p></div></article><span class="sans" style="font-size:14px;padding-top:2em"></span></body></html>
