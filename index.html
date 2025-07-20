@@ -1,769 +1,570 @@
-<html><head><meta http-equiv="Content-Type" content="text/html; charset=utf-8"/><title>MacOS FR24Feeder/TrackedPlanesMap</title><style>
-/* cspell:disable-file */
-/* webkit printing magic: print all background colors */
-html {
-	-webkit-print-color-adjust: exact;
-}
-* {
-	box-sizing: border-box;
-	-webkit-print-color-adjust: exact;
-}
-
-html,
-body {
-	margin: 0;
-	padding: 0;
-}
-@media only screen {
-	body {
-		margin: 2em auto;
-		max-width: 900px;
-		color: rgb(55, 53, 47);
-	}
-}
-
-body {
-	line-height: 1.5;
-	white-space: pre-wrap;
-}
-
-a,
-a.visited {
-	color: inherit;
-	text-decoration: underline;
-}
-
-.pdf-relative-link-path {
-	font-size: 80%;
-	color: #444;
-}
-
-h1,
-h2,
-h3 {
-	letter-spacing: -0.01em;
-	line-height: 1.2;
-	font-weight: 600;
-	margin-bottom: 0;
-}
-
-.page-title {
-	font-size: 2.5rem;
-	font-weight: 700;
-	margin-top: 0;
-	margin-bottom: 0.75em;
-}
-
-h1 {
-	font-size: 1.875rem;
-	margin-top: 1.875rem;
-}
-
-h2 {
-	font-size: 1.5rem;
-	margin-top: 1.5rem;
-}
-
-h3 {
-	font-size: 1.25rem;
-	margin-top: 1.25rem;
-}
-
-.source {
-	border: 1px solid #ddd;
-	border-radius: 3px;
-	padding: 1.5em;
-	word-break: break-all;
-}
-
-.callout {
-	border-radius: 3px;
-	padding: 1rem;
-}
-
-figure {
-	margin: 1.25em 0;
-	page-break-inside: avoid;
-}
-
-figcaption {
-	opacity: 0.5;
-	font-size: 85%;
-	margin-top: 0.5em;
-}
-
-mark {
-	background-color: transparent;
-}
-
-.indented {
-	padding-left: 1.5em;
-}
-
-hr {
-	background: transparent;
-	display: block;
-	width: 100%;
-	height: 1px;
-	visibility: visible;
-	border: none;
-	border-bottom: 1px solid rgba(55, 53, 47, 0.09);
-}
-
-img {
-	max-width: 100%;
-}
-
-@media only print {
-	img {
-		max-height: 100vh;
-		object-fit: contain;
-	}
-}
-
-@page {
-	margin: 1in;
-}
-
-.collection-content {
-	font-size: 0.875rem;
-}
-
-.column-list {
-	display: flex;
-	justify-content: space-between;
-}
-
-.column {
-	padding: 0 1em;
-}
-
-.column:first-child {
-	padding-left: 0;
-}
-
-.column:last-child {
-	padding-right: 0;
-}
-
-.table_of_contents-item {
-	display: block;
-	font-size: 0.875rem;
-	line-height: 1.3;
-	padding: 0.125rem;
-}
-
-.table_of_contents-indent-1 {
-	margin-left: 1.5rem;
-}
-
-.table_of_contents-indent-2 {
-	margin-left: 3rem;
-}
-
-.table_of_contents-indent-3 {
-	margin-left: 4.5rem;
-}
-
-.table_of_contents-link {
-	text-decoration: none;
-	opacity: 0.7;
-	border-bottom: 1px solid rgba(55, 53, 47, 0.18);
-}
-
-table,
-th,
-td {
-	border: 1px solid rgba(55, 53, 47, 0.09);
-	border-collapse: collapse;
-}
-
-table {
-	border-left: none;
-	border-right: none;
-}
-
-th,
-td {
-	font-weight: normal;
-	padding: 0.25em 0.5em;
-	line-height: 1.5;
-	min-height: 1.5em;
-	text-align: left;
-}
-
-th {
-	color: rgba(55, 53, 47, 0.6);
-}
-
-ol,
-ul {
-	margin: 0;
-	margin-block-start: 0.6em;
-	margin-block-end: 0.6em;
-}
-
-li > ol:first-child,
-li > ul:first-child {
-	margin-block-start: 0.6em;
-}
-
-ul > li {
-	list-style: disc;
-}
-
-ul.to-do-list {
-	padding-inline-start: 0;
-}
-
-ul.to-do-list > li {
-	list-style: none;
-}
-
-.to-do-children-checked {
-	text-decoration: line-through;
-	opacity: 0.375;
-}
-
-ul.toggle > li {
-	list-style: none;
-}
-
-ul {
-	padding-inline-start: 1.7em;
-}
-
-ul > li {
-	padding-left: 0.1em;
-}
-
-ol {
-	padding-inline-start: 1.6em;
-}
-
-ol > li {
-	padding-left: 0.2em;
-}
-
-.mono ol {
-	padding-inline-start: 2em;
-}
-
-.mono ol > li {
-	text-indent: -0.4em;
-}
-
-.toggle {
-	padding-inline-start: 0em;
-	list-style-type: none;
-}
-
-/* Indent toggle children */
-.toggle > li > details {
-	padding-left: 1.7em;
-}
-
-.toggle > li > details > summary {
-	margin-left: -1.1em;
-}
-
-.selected-value {
-	display: inline-block;
-	padding: 0 0.5em;
-	background: rgba(206, 205, 202, 0.5);
-	border-radius: 3px;
-	margin-right: 0.5em;
-	margin-top: 0.3em;
-	margin-bottom: 0.3em;
-	white-space: nowrap;
-}
-
-.collection-title {
-	display: inline-block;
-	margin-right: 1em;
-}
-
-.page-description {
-	margin-bottom: 2em;
-}
-
-.simple-table {
-	margin-top: 1em;
-	font-size: 0.875rem;
-	empty-cells: show;
-}
-.simple-table td {
-	height: 29px;
-	min-width: 120px;
-}
-
-.simple-table th {
-	height: 29px;
-	min-width: 120px;
-}
-
-.simple-table-header-color {
-	background: rgb(247, 246, 243);
-	color: black;
-}
-.simple-table-header {
-	font-weight: 500;
-}
-
-time {
-	opacity: 0.5;
-}
-
-.icon {
-	display: inline-block;
-	max-width: 1.2em;
-	max-height: 1.2em;
-	text-decoration: none;
-	vertical-align: text-bottom;
-	margin-right: 0.5em;
-}
-
-img.icon {
-	border-radius: 3px;
-}
-
-.user-icon {
-	width: 1.5em;
-	height: 1.5em;
-	border-radius: 100%;
-	margin-right: 0.5rem;
-}
-
-.user-icon-inner {
-	font-size: 0.8em;
-}
-
-.text-icon {
-	border: 1px solid #000;
-	text-align: center;
-}
-
-.page-cover-image {
-	display: block;
-	object-fit: cover;
-	width: 100%;
-	max-height: 30vh;
-}
-
-.page-header-icon {
-	font-size: 3rem;
-	margin-bottom: 1rem;
-}
-
-.page-header-icon-with-cover {
-	margin-top: -0.72em;
-	margin-left: 0.07em;
-}
-
-.page-header-icon img {
-	border-radius: 3px;
-}
-
-.link-to-page {
-	margin: 1em 0;
-	padding: 0;
-	border: none;
-	font-weight: 500;
-}
-
-p > .user {
-	opacity: 0.5;
-}
-
-td > .user,
-td > time {
-	white-space: nowrap;
-}
-
-input[type="checkbox"] {
-	transform: scale(1.5);
-	margin-right: 0.6em;
-	vertical-align: middle;
-}
-
-p {
-	margin-top: 0.5em;
-	margin-bottom: 0.5em;
-}
-
-.image {
-	border: none;
-	margin: 1.5em 0;
-	padding: 0;
-	border-radius: 0;
-	text-align: center;
-}
-
-.code,
-code {
-	background: rgba(135, 131, 120, 0.15);
-	border-radius: 3px;
-	padding: 0.2em 0.4em;
-	border-radius: 3px;
-	font-size: 85%;
-	tab-size: 2;
-}
-
-code {
-	color: #eb5757;
-}
-
-.code {
-	padding: 1.5em 1em;
-}
-
-.code-wrap {
-	white-space: pre-wrap;
-	word-break: break-all;
-}
-
-.code > code {
-	background: none;
-	padding: 0;
-	font-size: 100%;
-	color: inherit;
-}
-
-blockquote {
-	font-size: 1.25em;
-	margin: 1em 0;
-	padding-left: 1em;
-	border-left: 3px solid rgb(55, 53, 47);
-}
-
-.bookmark {
-	text-decoration: none;
-	max-height: 8em;
-	padding: 0;
-	display: flex;
-	width: 100%;
-	align-items: stretch;
-}
-
-.bookmark-title {
-	font-size: 0.85em;
-	overflow: hidden;
-	text-overflow: ellipsis;
-	height: 1.75em;
-	white-space: nowrap;
-}
-
-.bookmark-text {
-	display: flex;
-	flex-direction: column;
-}
-
-.bookmark-info {
-	flex: 4 1 180px;
-	padding: 12px 14px 14px;
-	display: flex;
-	flex-direction: column;
-	justify-content: space-between;
-}
-
-.bookmark-image {
-	width: 33%;
-	flex: 1 1 180px;
-	display: block;
-	position: relative;
-	object-fit: cover;
-	border-radius: 1px;
-}
-
-.bookmark-description {
-	color: rgba(55, 53, 47, 0.6);
-	font-size: 0.75em;
-	overflow: hidden;
-	max-height: 4.5em;
-	word-break: break-word;
-}
-
-.bookmark-href {
-	font-size: 0.75em;
-	margin-top: 0.25em;
-}
-
-.sans { font-family: ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI Variable Display", "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol"; }
-.code { font-family: "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace; }
-.serif { font-family: Lyon-Text, Georgia, ui-serif, serif; }
-.mono { font-family: iawriter-mono, Nitti, Menlo, Courier, monospace; }
-.pdf .sans { font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI Variable Display", "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol", 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK JP'; }
-.pdf:lang(zh-CN) .sans { font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI Variable Display", "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol", 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK SC'; }
-.pdf:lang(zh-TW) .sans { font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI Variable Display", "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol", 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK TC'; }
-.pdf:lang(ko-KR) .sans { font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI Variable Display", "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol", 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK KR'; }
-.pdf .code { font-family: Source Code Pro, "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK JP'; }
-.pdf:lang(zh-CN) .code { font-family: Source Code Pro, "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK SC'; }
-.pdf:lang(zh-TW) .code { font-family: Source Code Pro, "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK TC'; }
-.pdf:lang(ko-KR) .code { font-family: Source Code Pro, "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK KR'; }
-.pdf .serif { font-family: PT Serif, Lyon-Text, Georgia, ui-serif, serif, 'Twemoji', 'Noto Color Emoji', 'Noto Serif CJK JP'; }
-.pdf:lang(zh-CN) .serif { font-family: PT Serif, Lyon-Text, Georgia, ui-serif, serif, 'Twemoji', 'Noto Color Emoji', 'Noto Serif CJK SC'; }
-.pdf:lang(zh-TW) .serif { font-family: PT Serif, Lyon-Text, Georgia, ui-serif, serif, 'Twemoji', 'Noto Color Emoji', 'Noto Serif CJK TC'; }
-.pdf:lang(ko-KR) .serif { font-family: PT Serif, Lyon-Text, Georgia, ui-serif, serif, 'Twemoji', 'Noto Color Emoji', 'Noto Serif CJK KR'; }
-.pdf .mono { font-family: PT Mono, iawriter-mono, Nitti, Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK JP'; }
-.pdf:lang(zh-CN) .mono { font-family: PT Mono, iawriter-mono, Nitti, Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK SC'; }
-.pdf:lang(zh-TW) .mono { font-family: PT Mono, iawriter-mono, Nitti, Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK TC'; }
-.pdf:lang(ko-KR) .mono { font-family: PT Mono, iawriter-mono, Nitti, Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK KR'; }
-.highlight-default {
-	color: rgba(50, 48, 44, 1);
-}
-.highlight-gray {
-	color: rgba(115, 114, 110, 1);
-	fill: rgba(115, 114, 110, 1);
-}
-.highlight-brown {
-	color: rgba(159, 107, 83, 1);
-	fill: rgba(159, 107, 83, 1);
-}
-.highlight-orange {
-	color: rgba(217, 115, 13, 1);
-	fill: rgba(217, 115, 13, 1);
-}
-.highlight-yellow {
-	color: rgba(203, 145, 47, 1);
-	fill: rgba(203, 145, 47, 1);
-}
-.highlight-teal {
-	color: rgba(68, 131, 97, 1);
-	fill: rgba(68, 131, 97, 1);
-}
-.highlight-blue {
-	color: rgba(51, 126, 169, 1);
-	fill: rgba(51, 126, 169, 1);
-}
-.highlight-purple {
-	color: rgba(144, 101, 176, 1);
-	fill: rgba(144, 101, 176, 1);
-}
-.highlight-pink {
-	color: rgba(193, 76, 138, 1);
-	fill: rgba(193, 76, 138, 1);
-}
-.highlight-red {
-	color: rgba(205, 60, 58, 1);
-	fill: rgba(205, 60, 58, 1);
-}
-.highlight-default_background {
-	color: rgba(50, 48, 44, 1);
-}
-.highlight-gray_background {
-	background: rgba(248, 248, 247, 1);
-}
-.highlight-brown_background {
-	background: rgba(244, 238, 238, 1);
-}
-.highlight-orange_background {
-	background: rgba(251, 236, 221, 1);
-}
-.highlight-yellow_background {
-	background: rgba(251, 243, 219, 1);
-}
-.highlight-teal_background {
-	background: rgba(237, 243, 236, 1);
-}
-.highlight-blue_background {
-	background: rgba(231, 243, 248, 1);
-}
-.highlight-purple_background {
-	background: rgba(248, 243, 252, 1);
-}
-.highlight-pink_background {
-	background: rgba(252, 241, 246, 1);
-}
-.highlight-red_background {
-	background: rgba(253, 235, 236, 1);
-}
-.block-color-default {
-	color: inherit;
-	fill: inherit;
-}
-.block-color-gray {
-	color: rgba(115, 114, 110, 1);
-	fill: rgba(115, 114, 110, 1);
-}
-.block-color-brown {
-	color: rgba(159, 107, 83, 1);
-	fill: rgba(159, 107, 83, 1);
-}
-.block-color-orange {
-	color: rgba(217, 115, 13, 1);
-	fill: rgba(217, 115, 13, 1);
-}
-.block-color-yellow {
-	color: rgba(203, 145, 47, 1);
-	fill: rgba(203, 145, 47, 1);
-}
-.block-color-teal {
-	color: rgba(68, 131, 97, 1);
-	fill: rgba(68, 131, 97, 1);
-}
-.block-color-blue {
-	color: rgba(51, 126, 169, 1);
-	fill: rgba(51, 126, 169, 1);
-}
-.block-color-purple {
-	color: rgba(144, 101, 176, 1);
-	fill: rgba(144, 101, 176, 1);
-}
-.block-color-pink {
-	color: rgba(193, 76, 138, 1);
-	fill: rgba(193, 76, 138, 1);
-}
-.block-color-red {
-	color: rgba(205, 60, 58, 1);
-	fill: rgba(205, 60, 58, 1);
-}
-.block-color-default_background {
-	color: inherit;
-	fill: inherit;
-}
-.block-color-gray_background {
-	background: rgba(248, 248, 247, 1);
-}
-.block-color-brown_background {
-	background: rgba(244, 238, 238, 1);
-}
-.block-color-orange_background {
-	background: rgba(251, 236, 221, 1);
-}
-.block-color-yellow_background {
-	background: rgba(251, 243, 219, 1);
-}
-.block-color-teal_background {
-	background: rgba(237, 243, 236, 1);
-}
-.block-color-blue_background {
-	background: rgba(231, 243, 248, 1);
-}
-.block-color-purple_background {
-	background: rgba(248, 243, 252, 1);
-}
-.block-color-pink_background {
-	background: rgba(252, 241, 246, 1);
-}
-.block-color-red_background {
-	background: rgba(253, 235, 236, 1);
-}
-.select-value-color-uiBlue { background-color: undefined; }
-.select-value-color-pink { background-color: rgba(225, 136, 179, 0.27); }
-.select-value-color-purple { background-color: rgba(168, 129, 197, 0.27); }
-.select-value-color-green { background-color: rgba(123, 183, 129, 0.27); }
-.select-value-color-gray { background-color: rgba(84, 72, 49, 0.15); }
-.select-value-color-translucentGray { background-color: undefined; }
-.select-value-color-orange { background-color: rgba(224, 124, 57, 0.27); }
-.select-value-color-brown { background-color: rgba(210, 162, 141, 0.35); }
-.select-value-color-red { background-color: rgba(244, 171, 159, 0.4); }
-.select-value-color-yellow { background-color: rgba(236, 191, 66, 0.39); }
-.select-value-color-blue { background-color: rgba(93, 165, 206, 0.27); }
-.select-value-color-pageGlass { background-color: undefined; }
-.select-value-color-washGlass { background-color: undefined; }
-
-.checkbox {
-	display: inline-flex;
-	vertical-align: text-bottom;
-	width: 16;
-	height: 16;
-	background-size: 16px;
-	margin-left: 2px;
-	margin-right: 5px;
-}
-
-.checkbox-on {
-	background-image: url("data:image/svg+xml;charset=UTF-8,%3Csvg%20width%3D%2216%22%20height%3D%2216%22%20viewBox%3D%220%200%2016%2016%22%20fill%3D%22none%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%0A%3Crect%20width%3D%2216%22%20height%3D%2216%22%20fill%3D%22%2358A9D7%22%2F%3E%0A%3Cpath%20d%3D%22M6.71429%2012.2852L14%204.9995L12.7143%203.71436L6.71429%209.71378L3.28571%206.2831L2%207.57092L6.71429%2012.2852Z%22%20fill%3D%22white%22%2F%3E%0A%3C%2Fsvg%3E");
-}
-
-.checkbox-off {
-	background-image: url("data:image/svg+xml;charset=UTF-8,%3Csvg%20width%3D%2216%22%20height%3D%2216%22%20viewBox%3D%220%200%2016%2016%22%20fill%3D%22none%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%0A%3Crect%20x%3D%220.75%22%20y%3D%220.75%22%20width%3D%2214.5%22%20height%3D%2214.5%22%20fill%3D%22white%22%20stroke%3D%22%2336352F%22%20stroke-width%3D%221.5%22%2F%3E%0A%3C%2Fsvg%3E");
-}
-	
-</style></head><body><article id="2079eb5c-4b27-808e-ba99-fa10e7c6b431" class="page sans"><header><h1 class="page-title">RTL-SDR MacOS FR24Feeder <br>and <br>Tracked Planes Map ✈️</h1><p class="page-description"></p></header><div class="page-body"><p id="2079eb5c-4b27-80d7-a06e-c34d3ef0ab98" class="">Hi all, I created this tutorial as I was not able to find up to date in one solution for macOS.</p><p id="2079eb5c-4b27-801e-bae0-f9c2d89450c0" class="">This tutorial consists of 2 steps:</p><ol type="1" id="2079eb5c-4b27-801b-a6b1-c1d72031b0f8" class="numbered-list" start="1"><li>Getting Dump1090 software running on macOS</li></ol><ol type="1" id="2079eb5c-4b27-80ef-a86f-fdcfb8741c20" class="numbered-list" start="2"><li>Creating Docker container with fr24feed, which will process data from Dump1090</li></ol><p id="2079eb5c-4b27-8012-b6b7-f68fd6a07fc0" class="">
-</p><p id="2079eb5c-4b27-800f-957a-fe6670307962" class="">Prerequisite:</p><ul id="2079eb5c-4b27-80a4-987f-cd3a19cfe44f" class="bulleted-list"><li style="list-style-type:disc">Python 3 is installed on your system</li></ul><ul id="2079eb5c-4b27-804b-83f4-fe8c9c24f1ef" class="bulleted-list"><li style="list-style-type:disc">Docker is installed on your system</li></ul><ul id="2079eb5c-4b27-80fd-bf5f-d65aae42165f" class="bulleted-list"><li style="list-style-type:disc">Own  <a href="https://www.rtl-sdr.com/about-rtl-sdr/">RTL-SDR dongle</a> and connect it to your Mac (I used a normal USB-C dock for the dongle connection)</li></ul><ul id="2079eb5c-4b27-80b3-a0bf-f15820096e74" class="bulleted-list"><li style="list-style-type:disc">Be registered as a FlightRadar24 feeder, you need <code>SHARING KEY</code>. You can check it here <a href="https://www.flightradar24.com/account/data-sharing">https://www.flightradar24.com/account/data-sharing</a></li></ul><h1 id="2079eb5c-4b27-80c5-87d3-fb74aa2eb4c3" class="">1. Getting Dump1090</h1><ol type="1" id="2079eb5c-4b27-8067-83ac-d144b883ab72" class="numbered-list" start="1"><li>Install <code>MacPorts</code> for your version of macOS from <a href="https://www.macports.org/install.php">https://www.macports.org/install.php</a></li></ol><p id="2079eb5c-4b27-804a-b691-ced8f9b14ad3" class="">
-</p><ol type="1" id="2079eb5c-4b27-8051-a395-ccee2038819b" class="numbered-list" start="1"><li>Run MacPorts</li></ol><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="2079eb5c-4b27-8067-88c1-de4eccb8cdfc" class="code"><code class="language-Bash">sudo port selfupdate
-sudo port install help2man
-sudo port install gqrx</code></pre><ol type="1" id="2079eb5c-4b27-8030-81d7-c5fd311c79c2" class="numbered-list" start="3"><li>Build Dump1090 software (is used RTL-SDR feed decoding)</li></ol><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="2079eb5c-4b27-80fc-99d5-ecfd5683651a" class="code"><code class="language-Bash"># in the directory where you want to have dump1090
-git clone https://github.com/flightaware/dump1090
-cd dump1090
-make</code></pre><p id="2079eb5c-4b27-80c7-b17f-dcb8db333ac5" class="">In one terminal run (you must be in the directory where the Dump1090 is installed):</p><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="2079eb5c-4b27-8085-8571-ceb5dbcc7944" class="code"><code class="language-Bash">./dump1090 --interactive --net --write-json public_html/data --aggressive</code></pre><p id="2079eb5c-4b27-8020-ba79-decdccc3af68" class="">This step initializes feed collection from your RTL-SDR dongle.</p><p id="2079eb5c-4b27-802b-85f8-cf79e83d278e" class="">It should show something like this:</p><figure id="2079eb5c-4b27-8058-b2ad-e3246c154de5" class="image"><a href="MacOS_FR24Feeder_TrackedPlanesMap/image.png"><img style="width:709.9921875px" src="MacOS_FR24Feeder_TrackedPlanesMap/image.png"/></a></figure><p id="2079eb5c-4b27-8023-a2e1-f6f824f359ae" class="">
-</p><h3 id="2079eb5c-4b27-80ca-b3f3-ff1bbbdd900e" class="">Now, visualize and check the data we are getting from RTL-SDR</h3><p id="2079eb5c-4b27-8067-b505-f89c758e5730" class="">In the second terminal run (you must be in the directory where the Dump1090 is installed):</p><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="2079eb5c-4b27-80ef-a708-f5dd9baa81e3" class="code"><code class="language-Bash"># TO START THE SERVER RUN FOLLOWING COMMANDS
-mkdir data
-python3 -m http.server 8090 &amp;
-
-# TO KILL THE SERVER RUN FOLLOWING COMMAND
-sudo kill $(sudo lsof -i :8090 | awk &#x27;NR&gt;1 {print $2}&#x27;)</code></pre><p id="2079eb5c-4b27-8075-9ca1-ef8d17aaf24c" class="">This will run the server on which we can access the map with our planes.</p><p id="2079eb5c-4b27-8068-ba7c-e3d806c59d64" class="">The address for the map is <a href="http://127.0.0.1:8090/public_html/">http://127.0.0.1:8090/public_html/</a> </p><p id="2079eb5c-4b27-80d5-b175-eb043533b757" class="">It should look like this:</p><figure id="2079eb5c-4b27-80b6-9f63-ea7dd79da524" class="image"><a href="MacOS_FR24Feeder_TrackedPlanesMap/image%201.png"><img style="width:709.984375px" src="MacOS_FR24Feeder_TrackedPlanesMap/image%201.png"/></a></figure><p id="2079eb5c-4b27-80a1-8d36-c18ddf3c1ae4" class="">Now that we have data visualized on the map, we will check that the data are exposed via TCP on various ports. </p><p id="2079eb5c-4b27-8068-9720-c972a75e0cee" class="">It is exposed on our macOS machine’s <code>localhost</code>, but we don’t want to use <code>localhost</code> as it can be confusing for the Docker container we will use in the future.</p><p id="2079eb5c-4b27-8023-8b5e-d1d1c1e78e5e" class="">Because of that, we need to find your macOS Host’s IP Address</p><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="2079eb5c-4b27-80ca-b4aa-e71b3bb76d2c" class="code"><code class="language-Bash"># Get your macOS host&#x27;s ip address
-ipconfig getifaddr en0
-</code></pre><p id="2079eb5c-4b27-80af-847b-e748e61418b1" class="">Remember the output of this command (e.g. <code>192.168.0.193</code>)</p><p id="2079eb5c-4b27-80a1-8541-f36d9f220665" class="">Now we will verify that we are getting the data from the RTL-SDR on the desired ports.</p><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="2079eb5c-4b27-8081-bfda-cf123f0fa5b9" class="code"><code class="language-Bash"># Replace 192.168.0.193 with your own IP address
-nc 192.168.0.193 30005</code></pre><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="2079eb5c-4b27-803e-95a6-d4c9a58d7891" class="code"><code class="language-Bash">3
- ���
-��h0�m3,2
-         �ɜ�ᗰ�k3
-                ��@Z���H0�}�63
-                              �̲l���H0�}�63
-                                          ��$����6
-                                                  : 
-                                                    ފ�o3</code></pre><p id="2079eb5c-4b27-804b-9e13-d533b6f23386" class="">You should see some binary output (won’t make sense to you, but will to FR24Feeder)</p><h1 id="2079eb5c-4b27-8086-b3f2-e9c748b1f168" class="">2. Creating FR24Feeder Docker container</h1><p id="2079eb5c-4b27-8056-ae22-df19d1541398" class="">
-</p><p id="2079eb5c-4b27-80a9-824e-f6dd8327c87f" class="">
-</p><ol type="1" id="2079eb5c-4b27-80ff-97a2-f56b6c9d37c2" class="numbered-list" start="1"><li>Create a new directory i.e. <code>FR24_docker</code></li></ol><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="2079eb5c-4b27-80b8-802d-dec19eb5dbf3" class="code"><code class="language-Bash">mkdir FR24_docker
-cd FR24_docker</code></pre><ol type="1" id="2079eb5c-4b27-800c-a14e-e0509dd75f42" class="numbered-list" start="2"><li>Now we need to create a Dockerfile</li></ol><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="2079eb5c-4b27-80d4-8efe-fa8a3b19c0d2" class="code"><code class="language-Bash">touch Dockerfile</code></pre><p id="2079eb5c-4b27-8071-9958-e917430ebcca" class="">Into this file, paste the following content:</p><p id="2079eb5c-4b27-8086-864a-c36d8f13f5ad" class=""><strong>NOTE: Replace </strong><code><strong>YOUR_FR24_KEY</strong></code> <strong>and</strong> <code><strong>YOUR_LOCAL_IP</strong></code> <strong>with your variables.</strong></p><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="2079eb5c-4b27-8061-80db-cb2d23ef679f" class="code"><code class="language-Bash"># Use a lightweight Debian base image
-FROM debian:bullseye-slim
-
-# Install dependencies required for FR24 feeder
-RUN apt-get update &amp;&amp; apt-get install -y \
-    wget \
-    tar \
-    libusb-1.0-0 \
-    net-tools \
-    procps \
-    &amp;&amp; rm -rf /var/lib/apt/lists/*
-
-# Download and install the FR24 feeder
-RUN wget -O /tmp/fr24feed.tgz https://repo-feed.flightradar24.com/linux_binaries/fr24feed_1.0.51-0_amd64.tgz \
-    &amp;&amp; if [ ! -s /tmp/fr24feed.tgz ]; then echo &quot;Download failed&quot;; exit 1; fi \
-    &amp;&amp; mkdir -p /opt/fr24feed \
-    &amp;&amp; tar -xzf /tmp/fr24feed.tgz -C /opt/fr24feed --strip-components=1 \
-    &amp;&amp; rm /tmp/fr24feed.tgz \
-    &amp;&amp; if [ ! -f /opt/fr24feed/fr24feed ]; then echo &quot;FR24 binary not found&quot;; exit 1; fi
-
-# Create a directory for FR24 logs
-RUN mkdir -p /var/log/fr24feed
-
-# Expose the FR24 feeder web interface port
-EXPOSE 8754
-
-# Environment variables for FR24 configuration
-ENV FR24KEY=&quot;YOUR_FR24_KEY&quot;
-ENV BEASTHOST=&quot;YOUR_LOCAL_IP&quot;
-ENV BEASTPORT=&quot;30005&quot;
-ENV MLAT=&quot;yes&quot;
-ENV MLAT_WITHOUT_GPS=&quot;yes&quot;
-
-# Copy a startup script to configure and run FR24 feeder
-COPY start-fr24feed.sh /start-fr24feed.sh
-RUN chmod +x /start-fr24feed.sh
-
-# Command to run the FR24 feeder
-CMD [&quot;/start-fr24feed.sh&quot;]</code></pre><p id="2079eb5c-4b27-804c-b5ec-f18439fd73dc" class="">Now, create another file <code>start-fr24feed.sh</code> </p><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="2079eb5c-4b27-80f4-99f4-e6a06cf6275b" class="code"><code class="language-Bash">touch start-fr24feed.sh</code></pre><p id="2079eb5c-4b27-80ae-88c9-cc160ad7aba5" class="">Into this file, paste the following content:</p><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="2079eb5c-4b27-8085-bd14-f70f4ed3b372" class="code"><code class="language-Bash">#!/bin/bash
-# Generate fr24feed.ini configuration file
-cat &gt; /etc/fr24feed.ini &lt;&lt;EOF
-receiver=&quot;beast-tcp&quot;
-host=&quot;${BEASTHOST}:${BEASTPORT}&quot;
-fr24key=&quot;${FR24KEY}&quot;
-bs=&quot;no&quot;
-raw=&quot;no&quot;
-logmode=&quot;1&quot;
-logpath=&quot;/var/log/fr24feed&quot;
-mlat=&quot;${MLAT}&quot;
-mlat-without-gps=&quot;${MLAT_WITHOUT_GPS}&quot;
-EOF
-
-# Start the FR24 feeder
-exec /opt/fr24feed/fr24feed</code></pre><p id="2079eb5c-4b27-80d9-bbca-cb71220b7153" class="">And now, finally, let&#x27;s build the Docker image and run our FR24Feeder container.</p><p id="2079eb5c-4b27-80cd-ae5b-c8a7dce6ab58" class="">Run the following commands:</p><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="2079eb5c-4b27-800e-ba9d-c5a808b597cc" class="code"><code class="language-Bash"># Build the Docker image
-docker build -t fr24feed .
-# Run the container 
-# (Replace 192.168.0.193 with your IP we got previously using ipconfig getifaddr en0)
-docker run -d --name fr24feed -p 8754:8754 -e BEASTHOST=192.168.0.193  -e BEASTPORT=30005 fr24feed</code></pre><p id="2079eb5c-4b27-804f-a753-f5c8d209dc3c" class="">At this point, everything should be working, and you should be able to check your FR24Feeder status on</p><p id="2079eb5c-4b27-8043-812b-f2b1b70fb5d2" class=""><a href="http://192.168.0.193:8754/">http://YOUR_IP_ADDR:8754/</a></p><p id="2079eb5c-4b27-806f-b80a-db73704a16e9" class="">or</p><p id="2079eb5c-4b27-8067-ac09-db86254f61f1" class=""><a href="http://localhost:8754/">http://localhost:8754/</a></p><p id="2079eb5c-4b27-80b5-9b6a-d4c2a2c78d5e" class="">It should look something like this.</p><figure id="2079eb5c-4b27-80cc-b920-f9ed6339a963" class="image"><a href="MacOS_FR24Feeder_TrackedPlanesMap/image%202.png"><img style="width:709.984375px" src="MacOS_FR24Feeder_TrackedPlanesMap/image%202.png"/></a></figure><p id="2079eb5c-4b27-8040-9d49-d4459015ad6b" class="">
-</p><p id="2079eb5c-4b27-80fc-8313-df509dc5f219" class="">
-</p><p id="2079eb5c-4b27-80ac-8206-cd874a3ac85e" class="">Hope this helps.&lt;3</p></div></article><span class="sans" style="font-size:14px;padding-top:2em"></span></body></html>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Ladislav Vašina</title>
+  <link rel="icon" type="image/svg+xml" href="data/logoIcon.svg">
+  <script src="https://cdn.jsdelivr.net/npm/react@18.2.0/umd/react.production.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/react-dom@18.2.0/umd/react-dom.production.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@babel/standalone@7.20.6/babel.min.js"></script>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.7.0/p5.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/particles.js/2.0.0/particles.min.js"></script>
+  <style>
+    /* Glowing Button Styles */
+    .button-85 {
+      padding: 0.6em 2em;
+      border: none;
+      outline: none;
+      color: rgb(255, 255, 255);
+      background: #111;
+      cursor: pointer;
+      position: relative;
+      z-index: 0;
+      border-radius: 10px;
+      user-select: none;
+      -webkit-user-select: none;
+      touch-action: manipulation;
+    }
+
+    .button-85:before {
+      content: "";
+      background: linear-gradient(
+        45deg,
+        #48ff00,
+        #00ffd5,
+        #002bff,
+        #48ff00
+
+      );
+      position: absolute;
+      top: -2px;
+      left: -2px;
+      background-size: 400%;
+      z-index: -1;
+      filter: blur(5px);
+      -webkit-filter: blur(5px);
+      width: calc(100% + 4px);
+      height: calc(100% + 4px);
+      animation: glowing-button-85 20s linear infinite;
+      transition: opacity 0.3s ease-in-out;
+      border-radius: 10px;
+    }
+
+    @keyframes glowing-button-85 {
+      0% {
+        background-position: 0 0;
+      }
+      50% {
+        background-position: 400% 0;
+      }
+      100% {
+        background-position: 0 0;
+      }
+    }
+
+    .button-85:after {
+      z-index: -1;
+      content: "";
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      background: #222;
+      left: 0;
+      top: 0;
+      border-radius: 10px;
+    }
+  </style>
+</head>
+<body>
+  <div id="root"></div>
+  <script type="text/babel">
+    const { useState, useEffect, useRef } = React;
+
+    // Particles configuration
+    const particlesConfig = {
+      "particles": {
+        "number": {
+          "value": 80,
+          "density": {
+            "enable": true,
+            "value_area": 800
+          }
+        },
+        "color": {
+          "value": "#ffffff"
+        },
+        "shape": {
+          "type": "circle",
+          "stroke": {
+            "width": 0,
+            "color": "#000000"
+          }
+        },
+        "opacity": {
+          "value": 0.3,
+          "random": false,
+          "anim": {
+            "enable": false,
+            "speed": 1,
+            "opacity_min": 0.1,
+            "sync": false
+          }
+        },
+        "size": {
+          "value": 3,
+          "random": true,
+          "anim": {
+            "enable": false,
+            "speed": 40,
+            "size_min": 0.1,
+            "sync": false
+          }
+        },
+        "line_linked": {
+          "enable": true,
+          "distance": 150,
+          "color": "#ffffff",
+          "opacity": 0.2,
+          "width": 1
+        },
+        "move": {
+          "enable": true,
+          "speed": 2,
+          "direction": "none",
+          "random": false,
+          "straight": false,
+          "out_mode": "out",
+          "bounce": false,
+          "attract": {
+            "enable": false,
+            "rotateX": 600,
+            "rotateY": 1200
+          }
+        }
+      },
+      "interactivity": {
+        "detect_on": "canvas",
+        "events": {
+          "onhover": {
+            "enable": true,
+            "mode": "grab"
+          },
+          "onclick": {
+            "enable": true,
+            "mode": "push"
+          },
+          "resize": true
+        },
+        "modes": {
+          "grab": {
+            "distance": 140,
+            "line_linked": {
+              "opacity": 0.5
+            }
+          },
+          "push": {
+            "particles_nb": 4
+          }
+        }
+      },
+      "retina_detect": true
+    };
+
+    // Particles component
+    const ParticlesBackground = () => {
+      useEffect(() => {
+        if (window.particlesJS) {
+          particlesJS('particles-js', particlesConfig);
+        }
+      }, []);
+
+      return React.createElement('div', {
+        id: 'particles-js',
+        className: 'absolute inset-0 z-0'
+      });
+    };
+
+    // Wave animation component
+    const WaveAnimation = ({ containerId }) => {
+      const sketchRef = useRef(null);
+      
+      useEffect(() => {
+        const sketch = (p) => {
+          let container;
+          
+          p.setup = () => {
+            container = document.getElementById(containerId);
+            if (container) {
+              const canvas = p.createCanvas(container.offsetWidth, container.offsetHeight);
+              canvas.parent(containerId);
+              canvas.style('position', 'absolute');
+              canvas.style('top', '0');
+              canvas.style('left', '0');
+              canvas.style('z-index', '1');
+              p.noiseSeed(p.random(100));
+              p.noFill();
+            }
+          };
+          
+          p.windowResized = () => {
+            if (container) {
+              p.resizeCanvas(container.offsetWidth, container.offsetHeight);
+              p.noiseSeed(p.random(100));
+              p.draw();
+            }
+          };
+          
+          p.draw = () => {
+            p.clear();
+            const _o = p.millis() * 0.001;
+            
+            // Use fixed values instead of mouse for consistent animation
+            const amount = p.max(1, 15); // Fixed amount of waves
+            const ampl = p.height * 0.08; // Smaller amplitude for tile
+            
+            for(let k = 0; k < amount; k++) {
+              p.beginShape();
+              const offset = (1 - k/amount) * 4;
+              const detail = 8; // Fixed detail level
+              
+              for(let i = 0; i < (p.width + detail); i += detail) {
+                let y = p.height * 0.5;
+                y += p.sin(i * 0.01 - _o + offset) * ampl;
+                y += p.sin(i * 0.02 - _o + offset) * ampl;
+                y += p.sin(i * 0.04 - _o + 10 + offset + p.noise(_o * 0.1 + (i/p.width) * 5) * 10) * ampl;
+                p.vertex(i, y);
+              }
+              
+              // Use blue/purple gradient colors instead of white
+              const alpha = (k/(amount - 1) * 100);
+              p.stroke(100, 150, 255, alpha); // Blue waves
+              p.strokeWeight(1);
+              p.endShape();
+            }
+          };
+        };
+        
+        if (sketchRef.current) {
+          sketchRef.current.remove();
+        }
+        sketchRef.current = new p5(sketch);
+        
+        return () => {
+          if (sketchRef.current) {
+            sketchRef.current.remove();
+          }
+        };
+      }, [containerId]);
+      
+      return null;
+    };
+
+    const App = () => {
+
+      return (
+        <div className="bg-gradient-to-br from-gray-900 via-gray-800 to-green-900 text-white min-h-screen">
+          {/* Header */}
+          <header className="fixed top-0 w-full backdrop-blur-xl bg-black/10 border-b border-white/20 z-50">
+            <div className="max-w-5xl mx-auto px-4 py-4 flex justify-between items-center">
+              <h1 className="text-2xl font-bold">Ladislav Vašina</h1>
+            </div>
+          </header>
+
+          {/* Hero Section */}
+          <section className="min-h-screen flex items-center justify-center px-4 relative">
+            <ParticlesBackground />
+            <div className="max-w-5xl mx-auto text-center relative z-10">
+              <img
+                src="data/me.jpg"
+                alt="Ladislav Vašina Profile"
+                className="w-48 h-48 md:w-56 md:h-56 rounded-full mx-auto mb-6 
+                          object-cover shadow-2xl ring-4 ring-white/20 backdrop-blur-xl"
+              />
+              <h2 className="text-5xl font-extrabold mb-4">
+                Hi, I'm Ladislav Vašina
+              </h2>
+              <p className="text-xl mb-6 flex items-center justify-center flex-wrap">
+                Software Quality Engineer at 
+                <img 
+                  src="https://upload.wikimedia.org/wikipedia/commons/d/d8/Red_Hat_logo.svg" 
+                  alt="Red Hat" 
+                  className="w-6 h-6 mx-2"
+                />
+                Red Hat Satellite | Czech Republic
+              </p>
+              <a
+                href="https://github.com/LadislavVasina1"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="button-85 inline-block text-white font-bold text-xl px-8 py-4 transition-all duration-300"
+              >
+                View My GitHub
+              </a>
+            </div>
+          </section>
+
+          {/* About Section */}
+          <section className="py-16 px-4">
+            <div className="max-w-5xl mx-auto">
+              <div className="backdrop-blur-xl bg-white/5 rounded-3xl 
+                            p-8 border border-white/20 shadow-2xl">
+                <h2 className="text-4xl font-bold mb-8 text-center">About Me</h2>
+                <div className="space-y-6">
+                  <p className="text-xl leading-relaxed text-center text-gray-300">
+                    Software Quality Engineer passionate about building reliable, high-quality software
+                  </p>
+                  
+                  <div className="grid md:grid-cols-2 gap-8">
+                    <div>
+                      <h3 className="text-xl font-semibold mb-3 text-blue-400">Professional</h3>
+                      <p className="text-gray-300 leading-relaxed">
+                        Currently at <span className="text-white font-medium">Red Hat</span> on the Satellite team, 
+                        where I've grown from intern to Software Quality Engineer since 2022. I focus on ensuring 
+                        robust software delivery and testing excellence.
+                      </p>
+                    </div>
+                    
+                    <div>
+                      <h3 className="text-xl font-semibold mb-3 text-green-400">Education</h3>
+                      <p className="text-gray-300 leading-relaxed">
+                        Bachelor's in Information Technology from Brno University of Technology, 
+                        with additional studies of Space Applications at Faculty of Electrical Engineering and Communication. This unique combination fuels 
+                        my interest in both software engineering and aerospace technologies.
+                      </p>
+                    </div>
+                  </div>
+                  
+                  <div className="pt-4">
+                    <h3 className="text-xl font-semibold mb-3 text-purple-400 text-center">Interests & Passions</h3>
+                    <div className="flex flex-wrap justify-center gap-3">
+                      <span className="px-4 py-2 bg-white/10 rounded-full text-sm border border-white/20">Open Source</span>
+                      <span className="px-4 py-2 bg-white/10 rounded-full text-sm border border-white/20">Python</span>
+                      <span className="px-4 py-2 bg-white/10 rounded-full text-sm border border-white/20">Machine Learning</span>
+                      <span className="px-4 py-2 bg-white/10 rounded-full text-sm border border-white/20">PyTorch</span>
+                      <span className="px-4 py-2 bg-white/10 rounded-full text-sm border border-white/20">Aviation</span>
+                      <span className="px-4 py-2 bg-white/10 rounded-full text-sm border border-white/20">Space Technology</span>
+                      <span className="px-4 py-2 bg-white/10 rounded-full text-sm border border-white/20">Skiing</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </section>
+
+          {/* Projects Section */}
+          <section className="py-16 px-4">
+            <div className="max-w-5xl mx-auto">
+              <h2 className="text-4xl font-bold mb-6 text-center">Projects</h2>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div className="p-6 backdrop-blur-xl bg-white/5 rounded-3xl 
+                              border border-white/20 shadow-2xl transform transition-all duration-300 
+                              hover:scale-105 hover:shadow-3xl hover:-translate-y-2 
+                              hover:bg-white/10 relative overflow-hidden">
+                  <div id="wave-container" className="absolute inset-0 rounded-3xl overflow-hidden"></div>
+                  <WaveAnimation containerId="wave-container" />
+                  <div className="relative z-10">
+                    <h3 className="text-2xl font-semibold mb-2">AudioAugmentor</h3>
+                    <p className="mb-4">
+                      I am the author of the only audio augmentation Python package you will ever need 
+                      for your AI model training.
+                    </p>
+                    <div className="flex flex-col space-y-2">
+                      <a
+                        href="https://github.com/LadislavVasina1/AudioAugmentor_public"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="inline-flex items-center px-4 py-2 backdrop-blur-xl bg-white/5 
+                                  text-white rounded-xl hover:bg-white/10 
+                                  transition-all duration-300 border border-white/20 shadow-lg
+                                  hover:shadow-xl hover:scale-105 font-medium"
+                      >
+                        <svg className="w-4 h-4 mr-2" fill="currentColor" viewBox="0 0 24 24">
+                          <path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/>
+                        </svg>
+                        View on GitHub
+                      </a>
+                      <a
+                        href="https://pypi.org/project/AudioAugmentor/"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="inline-flex items-center px-4 py-2 backdrop-blur-xl bg-white/5 
+                                  text-white rounded-xl hover:bg-white/10 
+                                  transition-all duration-300 border border-white/20 shadow-lg
+                                  hover:shadow-xl hover:scale-105 font-medium"
+                      >
+                        <img 
+                          src="https://img.icons8.com/?size=100&id=lkdAEYKTxRxu&format=png&color=FFFFFF" 
+                          alt="PyPI" 
+                          className="w-4 h-4 mr-2"
+                        />
+                        View on PyPI
+                      </a>
+                    </div>
+                  </div>
+                </div>
+                <div className="p-6 backdrop-blur-xl bg-white/5 rounded-3xl 
+                              border border-white/20 shadow-2xl transform transition-all duration-300 
+                              hover:scale-105 hover:shadow-3xl hover:-translate-y-2 
+                              hover:bg-white/10">
+                  <h3 className="text-2xl font-semibold mb-2">AirGun</h3>
+                  <p className="mb-4">
+                    I am one of the main contributors to Airgun, which is a Python library that is built 
+                    over Widgetastic and Navmazing to make Satellite 6 UI testing easier.
+                  </p>
+                  <div className="flex space-x-4">
+                    <a
+                      href="https://github.com/SatelliteQE/airgun"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="inline-flex items-center px-4 py-2 backdrop-blur-xl bg-white/5 
+                                text-white rounded-xl hover:bg-white/10 
+                                transition-all duration-300 border border-white/20 shadow-lg
+                                hover:shadow-xl hover:scale-105 font-medium"
+                    >
+                      <svg className="w-4 h-4 mr-2" fill="currentColor" viewBox="0 0 24 24">
+                        <path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.30.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/>
+                      </svg>
+                      View on GitHub
+                    </a>
+                  </div>
+                </div>
+                <div className="p-6 backdrop-blur-xl bg-white/5 rounded-3xl 
+                              border border-white/20 shadow-2xl transform transition-all duration-300 
+                              hover:scale-105 hover:shadow-3xl hover:-translate-y-2 
+                              hover:bg-white/10">
+                  <h3 className="text-2xl font-semibold mb-2">Robottelo</h3>
+                  <p className="mb-4">
+                    I am a contributor to the test suite which exercises Red Hat Satellite.
+                  </p>
+                  <div className="flex space-x-4">
+                    <a
+                      href="https://github.com/SatelliteQE/robottelo"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="inline-flex items-center px-4 py-2 backdrop-blur-xl bg-white/5 
+                                text-white rounded-xl hover:bg-white/10 
+                                transition-all duration-300 border border-white/20 shadow-lg
+                                hover:shadow-xl hover:scale-105 font-medium"
+                    >
+                      <svg className="w-4 h-4 mr-2" fill="currentColor" viewBox="0 0 24 24">
+                        <path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.30.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/>
+                      </svg>
+                      View on GitHub
+                    </a>
+                  </div>
+                </div>
+                <div className="p-6 backdrop-blur-xl bg-white/5 rounded-3xl 
+                              border border-white/20 shadow-2xl transform transition-all duration-300 
+                              hover:scale-105 hover:shadow-3xl hover:-translate-y-2 
+                              hover:bg-white/10">
+                  <h3 className="text-2xl font-semibold mb-2">More Projects</h3>
+                  <p className="mb-4">
+                    Want to see more projects? 
+                    <br/>
+                    Check out my GitHub!
+                  </p>
+                  <div className="flex space-x-4">
+                    <a
+                      href="https://github.com/LadislavVasina1?tab=repositories"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="inline-flex items-center px-4 py-2 backdrop-blur-xl bg-white/5 
+                                text-white rounded-xl hover:bg-white/10 
+                                transition-all duration-300 border border-white/20 shadow-lg
+                                hover:shadow-xl hover:scale-105 font-medium"
+                    >
+                      <svg className="w-4 h-4 mr-2" fill="currentColor" viewBox="0 0 24 24">
+                        <path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.30.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/>
+                      </svg>
+                      View on GitHub
+                    </a>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </section>
+
+          {/* Contact Section */}
+          <section className="py-16 px-4">
+            <div className="max-w-5xl mx-auto text-center">
+              <div className="backdrop-blur-xl bg-white/5 rounded-3xl 
+                            p-8 border border-white/20 shadow-2xl">
+                <h2 className="text-4xl font-bold mb-6">Get in Touch</h2>
+                <p className="text-lg mb-6">
+                  Interested in collaborating or learning more about my work? 
+                  <br/>
+                  Connect with me!
+                </p>
+                <div className="flex justify-center space-x-4">
+                  <a
+                    href="https://github.com/LadislavVasina1"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="p-4 backdrop-blur-xl bg-white/10 
+                              text-white rounded-2xl hover:bg-white/20 
+                              transition-all duration-300 flex items-center justify-center 
+                              border border-white/30 shadow-xl"
+                  >
+                      <svg className="w-6 h-6" fill="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/>
+                      </svg>
+                    
+                    
+                </a>                  <a
+                    href="https://www.linkedin.com/in/ladislavvasina1/"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="p-4 backdrop-blur-xl bg-white/10 
+                              text-white rounded-2xl hover:bg-white/20 
+                              transition-all duration-300 flex items-center justify-center 
+                              border border-white/30 shadow-xl"
+                  >
+                      <svg className="w-6 h-6" fill="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/>
+                      </svg>
+                    
+                    
+                  </a>
+                </div>
+              </div>
+            </div>
+          </section>
+
+          {/* Other Links Section */}
+          <section className="py-16 px-4">
+            <div className="max-w-5xl mx-auto text-center">
+              <div className="backdrop-blur-xl bg-white/5 rounded-3xl 
+                            p-8 border border-white/20 shadow-2xl">
+                <h2 className="text-4xl font-bold mb-6">Other Links</h2>
+                <p className="text-lg mb-6">
+                  Explore more of my contributions and tutorials.
+                </p>
+                <div className="flex justify-center space-x-4">
+                  <a
+                    href="frFeeder.html"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="button-85 text-white font-semibold transition-all duration-300"
+                  >
+                    RTL-SDR MacOS FR24Feeder Tutorial
+                  </a>
+                </div>
+              </div>
+            </div>
+          </section>
+
+          {/* Footer */}
+          <footer className="py-6 text-center backdrop-blur-xl bg-white/5 
+                            border-t border-white/20">
+            <p>© 2025 Ladislav Vašina. All rights reserved.</p>
+          </footer>
+        </div>
+      );
+    };
+
+    ReactDOM.render(<App />, document.getElementById('root'));
+  </script>
+</body>
+</html>
